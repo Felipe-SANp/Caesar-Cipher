@@ -29,6 +29,18 @@ public class FileManager {
         }
     }
 
+    public void printInfoFile(String filePath){
+        try(FileInputStream file = new FileInputStream(filePath);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(file))){
+            String line;
+            while((line = reader.readLine()) != null){
+                System.out.println(line);
+            }
+        }catch (IOException e){
+            System.out.println("Error reading file");
+        }
+    }
+
     public Path getNewPathFileName(String pathFileName, String plusName) {
         int dotIndex = pathFileName.lastIndexOf(".");
         return Path.of(pathFileName.substring(0, dotIndex) + plusName + pathFileName.substring(dotIndex));
