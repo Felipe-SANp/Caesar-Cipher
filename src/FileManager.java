@@ -36,6 +36,7 @@ public class FileManager {
 
     public void createNewFile(Path filePath){
         try{
+            //noinspection ResultOfMethodCallIgnored
             filePath.toFile().createNewFile();
         }
         catch (IOException e){
