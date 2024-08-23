@@ -34,14 +34,13 @@ public class FileManager {
         return Path.of(pathFileName.substring(0, dotIndex) + plusName + pathFileName.substring(dotIndex));
     }
 
-    public boolean createNewFile(Path filePath){
+    public void createNewFile(Path filePath){
         try{
-            return filePath.toFile().createNewFile();
+            filePath.toFile().createNewFile();
         }
         catch (IOException e){
             System.out.println("Error creating file");
         }
-        return false;
     }
     public String cleanPath(String path){
         if(path.contains("\\")){
