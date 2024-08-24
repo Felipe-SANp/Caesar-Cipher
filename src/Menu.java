@@ -1,4 +1,5 @@
 import java.nio.file.Path;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
@@ -14,72 +15,101 @@ public class Menu {
 
     public void displayMenu() {
         int choice;
-        do {
-            String menu = """
-                    
-                    Caesar Cipher
-                    1. Encriptar archivo
-                    2. Desencriptar archivo con llave
-                    3. Imprimir informacion de archivo en consola
-                    0. Salir
-                    Ingresa tu opcion:\s""";
-            System.out.println(menu);
-            choice = scanner.nextInt();
-            scanner.nextLine();
+        try {
+            do {
+                String menu = """
+                                           \s
+                        Caesar Cipher
+                        1. Encriptar archivo
+                        2. Desencriptar archivo con llave
+                        3. Imprimir informacion de archivo en consola
+                        0. Salir
+                        Ingresa tu opcion:\s""";
+                println(menu);
+                choice = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (choice) {
-                case 1:
-                    encryptFile();
-                    break;
-                case 2:
-                    decryptFile();
-                    break;
-                case 3:
-                    printInfoFile();
-                    break;
-                case 0:
-                    System.out.println("Saliendo...");
-                    break;
-                default:
-                    System.out.println("Opcion invalida, intente de nuevo.");
-            }
-        } while (choice != 0);
+                switch (choice) {
+                    case 1:
+                        encryptFile();
+                        break;
+                    case 2:
+                        decryptFile();
+                        break;
+                    case 3:
+                        printInfoFile();
+                        break;
+                    case 0:
+                        println("Saliendo...");
+                        break;
+                    default:
+                        println("Opcion invalida, intente de nuevo.");
+                }
+            } while (choice != 0);
+        } catch (InputMismatchException e){
+            println("Tipo de dato incorrecto ingresado.\nReinicie el programa.");
+        }
     }
 
     private void encryptFile() {
-        System.out.print("Ingrese el directorio del archivo: ");
+        print("Ingrese el directorio del archivo: ");
         String filePath = scanner.nextLine();
-        System.out.print("Ingrese su llave de encriptacion: ");
-        int key = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        print("Ingrese su llave de encriptacion: ");
 
-        Path encryptedPath = caesarCipher.encrypt(filePath, key);
+        int keyInt = testInputKey(scanner.nextLine());
+
+        if(keyInt == 0){
+            println("Llave invalida. Por favor ingrese un numero entero.");
+            return;
+        }
+
+        Path encryptedPath = caesarCipher.encrypt(filePath, keyInt);
         if (encryptedPath != null) {
-            System.out.println("Archivo encriptado. Directorio del archivo: " + encryptedPath);
+            println("Archivo encriptado. Directorio del archivo: " + encryptedPath);
         } else {
-            System.out.println("Encriptacion fallida. Por favor revise la llave y directorio del archivo.");
+            println("Encriptacion fallida. Por favor revise la llave y/o directorio del archivo.");
         }
     }
 
     private void decryptFile() {
-        System.out.print("Ingrese el directorio del archivo a desencriptar: ");
+        print("Ingrese el directorio del archivo a desencriptar: ");
         String filePath = scanner.nextLine();
-        System.out.print("Ingrese la llave de desencriptacion: ");
-        int key = scanner.nextInt();
-        scanner.nextLine();
+        print("Ingrese la llave de desencriptacion: ");
 
-        Path decryptedPath = caesarCipher.decrypt(filePath, key);
+        int keyInt = testInputKey(scanner.nextLine());
+
+        if(keyInt == 0){
+            println("Llave invalida. Por favor ingrese un numero entero.");
+            return;
+        }
+        Path decryptedPath = caesarCipher.decrypt(filePath, keyInt);
         if (decryptedPath != null) {
-            System.out.println("Archivo desencriptado. Directorio del archivo: " + decryptedPath);
+            println("Archivo desencriptado. Directorio del archivo: " + decryptedPath);
         } else {
-            System.out.println("Desencriptacion fallida. Por favor revise la llave y directorio del archivo.");
+            println("Desencriptacion fallida. Por favor revise la llave y/o directorio del archivo.");
         }
     }
 
     private void printInfoFile() {
-        System.out.print("Ingrese el directorio del archivo: ");
+        print("Ingrese el directorio del archivo: ");
         String filePath = scanner.nextLine();
-        System.out.println();
+        println("");
         fileManager.printInfoFile(filePath);
+    }
+
+    private int testInputKey(String input){
+        String regex = "^[0-9]+$";
+        if(!input.matches(regex)){
+            return  0;
+        } else {
+            return Integer.parseInt(input);
+        }
+    }
+
+    public void print(String message){
+        System.out.print(message);
+    }
+    public void println(String message){
+        System.out.println(message);
     }
 }

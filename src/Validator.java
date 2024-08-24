@@ -7,6 +7,6 @@ public class Validator {
     }
     public boolean isNotFileExists(String filePath) {
         Path path = Path.of(filePath);
-        return !Files.exists(path);
+        return !Files.exists(path) || Files.isDirectory(path);
     }
 }
