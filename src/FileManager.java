@@ -55,6 +55,11 @@ public class FileManager {
             System.out.println("Error creating file");
         }
     }
+    /**
+     * This method replaces the backslashes with forward slashes
+     * @param path the path to be cleaned
+     *             @return the cleaned path
+     * */
     public String cleanPath(String path){
         if(path.contains("\\")){
             return path.replace('\\', '/');
